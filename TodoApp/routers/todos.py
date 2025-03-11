@@ -7,8 +7,8 @@ from starlette import status
 from starlette.exceptions import HTTPException
 from .auth import get_current_user
 
-import models
-from database import SessionLocal
+from .. import models
+from ..database import SessionLocal
 
 router = APIRouter(
     prefix='/todo',

@@ -5,9 +5,9 @@ from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from starlette import status
-from models import User
+from ..models import User
 from passlib.context import CryptContext
-from database import SessionLocal
+from ..database import SessionLocal
 from starlette.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import jwt, JWTError
