@@ -72,8 +72,12 @@ async def read_todos_by_priority(user: user_dependency, db: db_dependency, todos
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authenticate failed')
 
-    return db.query(models.Todos).filter(models.Todos.priority == todos_priority).filter(
+    todo_model = db.query(models.Todos).filter(models.Todos.priority == todos_priority).filter(
         models.Todos.owner_id == user.get('id')).all()
+
+    if todo_model is not None:
+        return todo_model
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Item not found')
 
 
 @router.post('/create_todo', status_code=status.HTTP_201_CREATED)
@@ -81,7 +85,7 @@ async def crete_todo(db: db_dependency, user: user_dependency, todo_request: Tod
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Authentication failed')
 
-    todo_model = models.Todos(**todo_request.dict(), owner_id=user.get('id'))
+    todo_model = models.Todos(**todo_request.model_dump(), owner_id=user.get('id'))
     db.add(todo_model)
     db.commit()
 
