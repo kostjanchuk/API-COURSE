@@ -11,8 +11,8 @@ from .. import models
 from ..database import SessionLocal
 
 router = APIRouter(
-    prefix='/todo',
-    tags=['todo']
+    prefix='/todos',
+    tags=['todos']
 )
 
 
