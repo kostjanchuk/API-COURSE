@@ -1,7 +1,7 @@
 from datetime import timedelta, datetime, timezone
 from typing import Annotated
-
-from fastapi import APIRouter, Depends, Path
+from fastapi.templating import Jinja2Templates
+from fastapi import APIRouter, Depends, Path, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from starlette import status
@@ -34,7 +34,21 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
+templates = Jinja2Templates(directory='TodoApp/templates')
 
+
+# Templates
+@router.get('/login-page')
+def render_login_page(request: Request):
+    return templates.TemplateResponse("login.html", {'request': request})
+
+
+@router.get('/register-page')
+def render_register_page(request: Request):
+    return templates.TemplateResponse("register.html", {'request': request})
+
+
+# Endpoints
 class CreateUserRequest(BaseModel):
     email: str = Field(max_length=50)
     username: str = Field(max_length=50)
@@ -93,7 +107,7 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Could not validate user')
 
 
-@router.post('/create-user', status_code=status.HTTP_201_CREATED)
+@router.post('/', status_code=status.HTTP_201_CREATED)
 async def create_user(db: db_dependency, create_user_request: CreateUserRequest):
     user_model = User(
         email=create_user_request.email,

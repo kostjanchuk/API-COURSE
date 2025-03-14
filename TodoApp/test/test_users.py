@@ -20,7 +20,7 @@ def test_change_password_authenticated(test_user):
     response_data = {'password': 'admin',
                      'new_password': 'admin'}
 
-    response = client.put('/user/change-password', json=response_data)
+    response = client.put('/user/password', json=response_data)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -29,7 +29,7 @@ def test_change_password_authenticated_not_valid(test_user):
     response_data = {'password': 'wrong_password',
                      'new_password': 'admin'}
 
-    response = client.put('/user/change-password', json=response_data)
+    response = client.put('/user/password', json=response_data)
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
     assert response.json() == {'detail': 'Not valid password'}

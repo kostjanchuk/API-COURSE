@@ -20,7 +20,7 @@ def test_get_all_authenticated(test_todo):
 
 
 def test_get_one_authenticated(test_todo):
-    response = client.get('/todos/1')
+    response = client.get('/todos/todo/1')
     assert response.status_code == status.HTTP_200_OK
     assert response.json() == {'title': 'todo 1',
                                'description': 'test todo',
@@ -32,7 +32,7 @@ def test_get_one_authenticated(test_todo):
 
 
 def test_get_one_authenticated_not_found():
-    response = client.get('/todos/999')
+    response = client.get('/todos/todo/999')
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {'detail': 'Item not found'}
 
@@ -44,7 +44,7 @@ def test_create_todo_authenticated(test_todo):
                      'complete': False,
                      }
 
-    response = client.post('todos/create_todo', json=response_data)
+    response = client.post('todos/todo', json=response_data)
 
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -65,7 +65,7 @@ def test_update_todo_authenticated(test_todo):
                      'complete': False,
                      }
 
-    response = client.put('todos/update_todo/1', json=response_data)
+    response = client.put('todos/todo/1', json=response_data)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -86,14 +86,14 @@ def test_update_todo_authenticated_not_found(test_todo):
                      'complete': False,
                      }
 
-    response = client.put('todos/update_todo/999', json=response_data)
+    response = client.put('todos/todo/999', json=response_data)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {'detail': 'Item not found'}
 
 
 def test_delete_todo_authenticated(test_todo):
-    response = client.delete('todos/delete_todo/1')
+    response = client.delete('todos/todo/1')
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -104,7 +104,7 @@ def test_delete_todo_authenticated(test_todo):
 
 
 def test_delete_todo_authenticated_not_found(test_todo):
-    response = client.delete('todos/delete_todo/999')
+    response = client.delete('todos/todo/999')
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert response.json() == {'detail': 'Item not found'}
